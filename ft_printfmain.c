@@ -1,119 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printfmain.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gotunc <gotunc@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/14 18:23:19 by gotunc            #+#    #+#             */
+/*   Updated: 2023/07/17 09:26:47 by gotunc           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "library.h"
-#include "libft.h"
-/*
-int ft_strlen(char *s)
-{
-    int i;
+#include "ft_printf.h"
 
-    i = 0;
-    while (s[i])
-        i++;
-    return (i);
-}*/
-int stringyazdir(char *d)
+int	kararmekanizmasi(char s, va_list c)
 {
-    write(1, d, ft_strlen(d));
-    return (ft_strlen(d));
+	int	len;
+
+	len = 0;
+	if (s == 's')
+		len += stringyazdir(va_arg(c, char *), 's', 's');
+	else if (s == 'c')
+		len += stringyazdir("", (char)va_arg(c, int), 'c');
+	else if (s == 'p')
+		len += adresyazdir((unsigned long long)va_arg(c, void *), 'p', SHEX, 2);
+	else if (s == 'i' || s == 'd')
+		len += doubleyazdir(va_arg(c, int));
+	else if (s == 'u')
+		len += unsignedyazdir(va_arg(c, unsigned int));
+	else if (s == 'x')
+		len += adresyazdir((unsigned int)va_arg(c, void *), 'x', SHEX, 0);
+	else if (s == 'X')
+		len += adresyazdir((unsigned int)va_arg(c, void *), 'X', BHEX, 0);
+	else if (s == '%')
+		len += yuzdeyazdir();
+	return (len);
 }
 
-int charyazdir(int d)
+int	ft_printf(const char *s, ...)
 {
-    char c;
+	va_list	d;
+	int		i;
+	int		len;
 
-    c = d;
-    write(1, &c, 1);
-    return (1);
-}
-
-int intlen(long d)
-{
-    int i;
-
-    i = 0;
-    if (d == 0)
-        return (1);
-    if (d < 0)
-        i++;
-    while (d != 0)
-    {
-        d /= 10;
-        i++;
-    }
-    return (i);
-}
-/*
-int adresyazdir(void *d)
-{
-    write(1, &d, intlen(d));
-    return (intlen(d));
-}
-*/
-int doubleyazdir(double d)
-{
-    char *c;
-    c = ft_itoa(d);
-    write(1, c, ft_strlen(c));
-    return (ft_strlen(c));
-}
-/*
-int unsignedyazdir(unsigned long int d)
-{
-    write(1, &d, intlen(d));
-    return (intlen(d));
-}
-
-int yuzdeyazdir()
-{
-    write(1, "%", 1);
-    return (1);
-}
-
-int integeryazdir(int d)
-{
-    write(1, &d, intlen(d));
-    return (intlen(d));
-}
-*/
-int ft_printf(const char *s, ...)
-{
-    va_list d;
-    int     i;
-    int     len;
-
-    i = 0;
-    len = 0;
-    va_start(d, s);
-    while (s[i])
-    {
-        if (s[i] == '%' && s[i+1])
-        {
-            if (s[i+1] == 's')
-                len += stringyazdir(va_arg(d, char *));
-            else if (s[i+1] == 'c')
-                len += charyazdir(va_arg(d, int));
-            //else if (s[i+1] == 'p')
-            //    len += adresyazdir(va_arg(d, void *));
-            else if (s[i+1] == 'd')
-                len += doubleyazdir(va_arg(d, double));
-            //else if (s[i+1] == 'i')
-            //    len += integeryazdir(va_arg(d, int));
-            //else if (s[i+1] == 'u')
-            //    len += unsignedyazdir(va_arg(d, unsigned long int));
-            //else if (s[i+1] == 'x')
-            //    len += kucukxyazdir();
-            //else if (s[i+1] == 'X')
-            //    len += buyukxyazdir();
-            //else if (s[i+1] == '%')
-            //    len += yuzdeyazdir();
-            i++;
-        }
-        else
-        {
-            write(1, &s[i], 1);
-            len++;
-        }
-        i++;
-    }
-    return (len);
+	i = 0;
+	len = 0;
+	va_start(d, s);
+	while (s[i])
+	{
+		if (s[i] == '%' && s[i + 1])
+		{
+			len += kararmekanizmasi(s[i + 1], d);
+			i++;
+		}
+		else
+		{
+			write(1, &s[i], 1);
+			len++;
+		}
+		i++;
+	}
+	return (len);
 }
