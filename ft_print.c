@@ -6,13 +6,13 @@
 /*   By: gotunc <gotunc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 03:15:26 by gotunc            #+#    #+#             */
-/*   Updated: 2023/07/17 08:55:53 by gotunc           ###   ########.fr       */
+/*   Updated: 2023/08/15 23:49:43 by gotunc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	adresyazdir(unsigned long long d, char x, char *y, int w)
+int	printadress(unsigned long long d, char x, char *y, int w)
 {
 	int	i;
 
@@ -20,7 +20,7 @@ int	adresyazdir(unsigned long long d, char x, char *y, int w)
 	return (i);
 }
 
-int	unsignedyazdir(unsigned int d)
+int	printunsigned(unsigned int d)
 {
 	char	*c;
 	int		len;
@@ -32,7 +32,7 @@ int	unsignedyazdir(unsigned int d)
 	return (len);
 }
 
-int	doubleyazdir(double d)
+int	printdecimal(double d)
 {
 	char	*c;
 	int		m;
@@ -45,7 +45,7 @@ int	doubleyazdir(double d)
 	return (m);
 }
 
-int	stringyazdir(char *d, char c, char m)
+int	printstring(char *d, char c, char m)
 {
 	if (m == 's')
 	{
@@ -62,7 +62,7 @@ int	stringyazdir(char *d, char c, char m)
 	return (1);
 }
 
-int	yuzdeyazdir(void)
+int	printpercent(void)
 {
 	char	d;
 
